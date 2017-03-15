@@ -8,7 +8,8 @@ const DEFAULT_LOG_NAME = 'static-server.txt';
 
 export default class StaticServerLauncher {
   onPrepare({ staticServerFolders: folders, staticServerLog: logging = false,
-      staticServerPort: port = 4567 }) {
+      staticServerPort: port = 4567, staticServerFallback: fallback = false,
+      staticServerFallbackFile : fallbackFile = 'index.html' }) {
     if (!folders) {
       return Promise.resolve();
     }
@@ -33,6 +34,11 @@ export default class StaticServerLauncher {
     (Array.isArray(folders) ? folders : [ folders ]).forEach((folder) => {
       this.log.debug('Mounting folder `%s` at `%s`', path.resolve(folder.path), folder.mount);
       this.server.use(folder.mount, express.static(folder.path));
+      if (fallback) {
+        this.server.use(function (req, res) {
+          res.status(200).sendFile(path.resolve(fallbackFile))
+        })
+      }
     });
 
     return new Promise((resolve, reject) => {
