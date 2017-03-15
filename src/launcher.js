@@ -35,6 +35,7 @@ export default class StaticServerLauncher {
       this.log.debug('Mounting folder `%s` at `%s`', path.resolve(folder.path), folder.mount);
       this.server.use(folder.mount, express.static(folder.path));
       if (fallback) {
+        this.log.debug('Using `%s` as 404 fallback', fallbackFile);
         this.server.use(function (req, res) {
           res.status(200).sendFile(path.resolve(fallbackFile))
         })
