@@ -59,6 +59,14 @@ Props:
  };
 ```
 
+### staticServerHost
+
+Host that the server runs on.
+
+Type: `String`
+
+Default: `0.0.0.0`
+
 ### staticServerPort
 
 Port to bind the server.

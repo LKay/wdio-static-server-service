@@ -7,15 +7,21 @@ import path from 'path';
 const DEFAULT_LOG_NAME = 'static-server.txt';
 
 export default class StaticServerLauncher {
-  onPrepare({ staticServerFolders: folders, staticServerLog: logging = false,
-      staticServerPort: port = 4567, staticServerFallback: fallback = false,
-      staticServerFallbackFile : fallbackFile = 'index.html' }) {
+  onPrepare({
+    staticServerFolders: folders,
+    staticServerLog: logging = false,
+    staticServerHost: host = "0.0.0.0",
+    staticServerPort: port = 4567,
+    staticServerFallback: fallback = false,
+    staticServerFallbackFile : fallbackFile = 'index.html'
+  }) {
     if (!folders) {
       return Promise.resolve();
     }
 
     this.server = express();
     this.folders = folders;
+    this.host = host;
     this.port = port;
 
     if (logging) {
@@ -43,12 +49,12 @@ export default class StaticServerLauncher {
     });
 
     return new Promise((resolve, reject) => {
-      this.server.listen(this.port, (err) => {
+      this.server.listen(this.port, this.host, (err) => {
         if (err) {
           reject(err);
         }
 
-        this.log.info(`Static server running at http://localhost:${port}`);
+        this.log.info(`Static server running at http://${host}:${port}`);
         resolve();
       });
     });
