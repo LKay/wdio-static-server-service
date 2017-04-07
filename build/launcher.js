@@ -92,6 +92,8 @@ module.exports =
 	      var folders = _ref.staticServerFolders,
 	          _ref$staticServerLog = _ref.staticServerLog,
 	          logging = _ref$staticServerLog === undefined ? false : _ref$staticServerLog,
+	          _ref$staticServerHost = _ref.staticServerHost,
+	          host = _ref$staticServerHost === undefined ? "0.0.0.0" : _ref$staticServerHost,
 	          _ref$staticServerPort = _ref.staticServerPort,
 	          port = _ref$staticServerPort === undefined ? 4567 : _ref$staticServerPort,
 	          _ref$staticServerFall = _ref.staticServerFallback,
@@ -105,6 +107,7 @@ module.exports =
 
 	      this.server = (0, _express2.default)();
 	      this.folders = folders;
+	      this.host = host;
 	      this.port = port;
 
 	      if (logging) {
@@ -132,12 +135,12 @@ module.exports =
 	      });
 
 	      return new Promise(function (resolve, reject) {
-	        _this.server.listen(_this.port, function (err) {
+	        _this.server.listen(_this.port, _this.host, function (err) {
 	          if (err) {
 	            reject(err);
 	          }
 
-	          _this.log.info('Static server running at http://localhost:' + port);
+	          _this.log.info('Static server running at http://' + host + ':' + port);
 	          resolve();
 	        });
 	      });
